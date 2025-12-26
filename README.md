@@ -8,7 +8,7 @@ Am consultat diferite implementari gasite pe github in C [1] si in C++ [2], prec
 
 
 Despre teste:
-Dintre grafurile pentru testare, cele de la 1 la 5 au fost scrise manual, celelalte (6-16) au fost generate automat cu generator_teste.c. Testele se pot imparti in 3 categorii:
+Dintre grafurile pentru testare, cele de la 1 la 5 au fost scrise manual, celelalte (6-16) au fost generate automat cu generator_teste.c. Testele se pot imparti in 3 categorii, fiecare categorie cu cate 5 teste:
 
 1. Corectitudine (teste mici)
 Fisiere: test1.in ... test5.in
