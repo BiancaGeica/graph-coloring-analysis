@@ -12,7 +12,7 @@ uint8_t** memory_alloc_matrix(int n) {
     uint8_t **matrix = (uint8_t**)malloc(n * sizeof(uint8_t*));
     if (matrix == NULL) {
         exit(EXIT_FAILURE);
-    } 
+    }
 
     for (size_t i = 0; i < n; i++) {
         *(matrix + i) = (uint8_t*)calloc(n, sizeof(uint8_t));
@@ -70,7 +70,7 @@ int saturation_of_vertex(int vertex, int n, uint8_t **matrix, uint8_t *colors) {
 int degree_vertex(int vertex, int n, uint8_t **matrix, uint8_t *colors) {
     int nr = 0;
     for (size_t i = 0; i < n; i++) {
-        // Count uncolored neighbours
+        // Count the number of uncolored neighbours
         if (*(*(matrix + vertex) + i) == 1 && *(colors + i) == 0)
             nr++;
     }
@@ -136,7 +136,7 @@ void dsatur(int n, uint8_t **matrix, uint8_t *colors) {
 int main() {
     int n, m;
     
-    if(scanf("%d %d", &n, &m) != 2) return 0; //n-verices m-edges
+    scanf("%d %d", &n, &m); //n-verices m-edges
     
     uint8_t **matrix = memory_alloc_matrix(n);
     
