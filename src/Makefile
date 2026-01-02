@@ -1,52 +1,32 @@
 CC = gcc
-# -O3 este esential pentru benchmark (viteza maxima)
+# -O3 este critic pentru viteza algoritmilor
 CFLAGS = -Wall -O3
 
-# Numele fisierului care genereaza testele (fara .c)
-GENERATOR = generator_teste
-
-# Fisierul in care se salveaza testul generat
-TEST_FILE = teste.in
-
-# 1. Gaseste toate fisierele .c din folderul curent
+# cauta toate fisierele .c din folder
 SOURCES = $(wildcard *.c)
 
-# 2. Creeaza lista de executabile (scoate extensia .c)
+# creeaza executabilele
 EXECS = $(SOURCES:.c=)
 
-# Regula default: Cand scrii 'make', compileaza TOATE fisierele .c gasite
+# ==========================================
+# REGULI
+# ==========================================
+
+
+# 1. Regula principala make - compileaza toate fisierele gasite
 all: $(EXECS)
 	@echo "--------------------------------------------------"
-	@echo "Succes! Au fost compilate urmatoarele executabile:"
-	@echo "  $(EXECS)"
+	@echo " Au fost create executabilele:"
+	@echo "   $(EXECS)"
 	@echo "--------------------------------------------------"
 
-# regula generica: transforma orice .c in executabil
+# 2. Regula de compilare (pentru fiecare fisier in parte)
 %: %.c
 	$(CC) $(CFLAGS) $< -o $@
 
-# regula GEN: Genereaza un test nou
-gen: $(GENERATOR)
-	@echo "Rulare generator..."
-	./$(GENERATOR) > $(TEST_FILE)
-	@echo "Fisierul $(TEST_FILE) a fost creat."
-
-# utilizare: make run ALG=nume_algoritm
-run:
-	@if [ -z "$(ALG)" ]; then \
-		echo "EROARE: Trebuie sa specifici algoritmul!"; \
-		echo "Exemplu: make run ALG=welsh_powell"; \
-	else \
-		echo "Rulare $(ALG) cu input din $(TEST_FILE)..."; \
-		./$(ALG) < $(TEST_FILE); \
-	fi
-
-# regula CLEAN: Sterge toate executabilele si fisierele temporare
+# 3. Regula clean ('make clean')
 clean:
-	rm -f $(EXECS) $(TEST_FILE) *.o *.exe
-	@echo "Curatenie completa."
-
-# regula INFO: Arata ce fisiere a gasit
-info:
-	@echo "Fisiere sursa gasite: $(SOURCES)"
-	@echo "Executabile de creat: $(EXECS)"
+	rm -f $(EXECS) *.o *.exe
+	@echo "Director curatat."
+	
+.PHONY: all clean

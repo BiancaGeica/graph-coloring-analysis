@@ -1,5 +1,16 @@
 # proiect_analiza_algoritmilor
 
+CUM FOLOSESTI MAKEFILE-UL
+
+1. Compilare (Build All) - Transforma toate fisierele .c din directorul curent in executabile.
+
+$ make
+
+
+2. Curatare (Clean) - Sterge toate executabilele si fisierele temporare.
+
+$ make clean
+
 Prezentare algoritm Welsh-Powell:
  - Welsh-Powell este o euristică Greedy bazată pe gradul nodurilor
  - Ideea de baza este ca nodurile cu multe conexiuni (grad mare) sunt cele mai dificil de colorat, așa că le colorăm primele.
