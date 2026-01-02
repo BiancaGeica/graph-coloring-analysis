@@ -122,7 +122,7 @@ int main() {
     }
 
     /* Output result */
-    printf("%d colors\n", colorCount);
+    printf("%d\n", colorCount);
     
     /* Print colors in the original order of nodes (0, 1, 2...), 
      * not the sorted order.
