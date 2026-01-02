@@ -52,7 +52,13 @@ int main() {
 
     /* Read edges, build adjacency matrix, and calculate degrees */
     for (int i = 0; i < M; i++) {
-        scanf("%d %d", &u, &v);
+        /* Validate the I/O operation: ensure exactly 2 integers were successfully read. 
+         * If input is malformed or EOF is reached unexpectedly, stop processing to 
+         * avoid undefined behavior.
+         * In other words - I solved a warning.
+         */
+        if (scanf("%d %d", &u, &v) != 2)
+            break;
         if(u < N && v < N) {
             /* Mark the edge in the dynamic matrix */
             adjMatrix[u][v] = 1;
