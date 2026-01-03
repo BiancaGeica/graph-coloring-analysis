@@ -1,0 +1,19 @@
+#!/bin/bash
+
+echo "Testele pentru DSat cu matrice" > output_teste.txt
+
+for i in {1..217}; do
+    echo "Testul ${i} este in curs de derulare....."
+    echo "~*~Testul ${i}~*~" >> output_teste.txt
+    ../src/algorithm_degree_of_saturation < test${i}.in >> output_teste.txt
+done
+
+echo "Testele pentru DSat optimizat" >> output_teste.txt
+
+for i in {1..217}; do
+    echo "Testul ${i} este in curs de derulare....."
+    echo "~*~Testul ${i}~*~" >> output_teste.txt
+    ../src/algorithm_degree_of_saturation < test${i}.in >> output_teste.txt
+done
+
+echo "Executia s-a incheiat cu succes!"
