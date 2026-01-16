@@ -1,123 +1,136 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
+#include "graph_coloring.h"
 
-/**
- * Structure for Adjacency Lists (efficient for large/sparse graphs)
- */
-typedef struct Node {
-    int vertex;
-    struct Node* next;
-} Node;
-
-typedef struct Graph {
-    int numVertices;
-    Node** adjLists;
-} Graph;
-
-// Function to create a new node
-Node* createNode(int v) {
-    Node* newNode = malloc(sizeof(Node));
-    newNode->vertex = v;
+/* Function to create a new adjacency list node */
+AdjListNode* createNode(int dest) {
+    AdjListNode* newNode = (AdjListNode*)malloc(sizeof(AdjListNode));
+    newNode->dest = dest;
     newNode->next = NULL;
     return newNode;
 }
 
-// Function to create the graph
-Graph* createGraph(int vertices) {
-    Graph* graph = malloc(sizeof(Graph));
-    graph->numVertices = vertices;
-    graph->adjLists = malloc(vertices * sizeof(Node*));
-    for (int i = 0; i < vertices; i++)
-        graph->adjLists[i] = NULL;
+/* Function to create a graph with N vertices */
+Graph* createGraph(int N, int M) {
+    Graph* graph = (Graph*)malloc(sizeof(Graph));
+    graph->N = N;
+    graph->M = M;
+    graph->array = (AdjList*)malloc(N * sizeof(AdjList));
+    
+    /* Initialize adjacency lists and matrices */
+    for (int i = 0; i < N; i++) {
+        graph->array[i].head = NULL;
+        graph->color[i] = 0;
+        for (int j = 0; j < N; j++) {
+            graph->adjMatrix[i][j] = false;
+        }
+    }
+    
     return graph;
 }
 
-// Function to add an edge (undirected graph)
-void addEdge(Graph* graph, int s, int d) {
-    Node* newNode = createNode(d);
-    newNode->next = graph->adjLists[s];
-    graph->adjLists[s] = newNode;
-
-    newNode = createNode(s);
-    newNode->next = graph->adjLists[d];
-    graph->adjLists[d] = newNode;
+/* Function to add an edge to an undirected graph */
+void addEdge(Graph* graph, int u, int v) {
+    /* Add edge from u to v */
+    AdjListNode* newNode = createNode(v);
+    newNode->next = graph->array[u].head;
+    graph->array[u].head = newNode;
+    
+    /* Add edge from v to u (undirected) */
+    newNode = createNode(u);
+    newNode->next = graph->array[v].head;
+    graph->array[v].head = newNode;
+    
+    /* Update adjacency matrix */
+    graph->adjMatrix[u][v] = true;
+    graph->adjMatrix[v][u] = true;
 }
 
-/**
- * Greedy Algorithm for Coloring
- */
-void greedyColoring(Graph* graph) {
-    int n = graph->numVertices;
-    int* result = malloc(n * sizeof(int));
-    bool* available = malloc(n * sizeof(bool));
-
-    // Initialization: no node has a color, all colors are available
-    for (int i = 0; i < n; i++) {
-        result[i] = -1;
-        available[i] = true;
-    }
-
-    // Assign the first color to the first node
-    result[0] = 0;
-
-    for (int u = 1; u < n; u++) {
-        // Mark colors of already colored neighbors as unavailable
-        Node* temp = graph->adjLists[u];
-        while (temp) {
-            if (result[temp->vertex] != -1) {
-                available[result[temp->vertex]] = false;
+/* Function to free the graph memory */
+void freeGraph(Graph* graph) {
+    if (graph) {
+        for (int i = 0; i < graph->N; i++) {
+            AdjListNode* current = graph->array[i].head;
+            while (current) {
+                AdjListNode* temp = current;
+                current = current->next;
+                free(temp);
             }
-            temp = temp->next;
         }
-
-        // Find the first available color
-        int cr;
-        for (cr = 0; cr < n; cr++) {
-            if (available[cr]) break;
-        }
-
-        result[u] = cr; // Assign color
-
-        // Reset the availability array for the next node
-        temp = graph->adjLists[u];
-        while (temp) {
-            if (result[temp->vertex] != -1) {
-                available[result[temp->vertex]] = true;
-            }
-            temp = temp->next;
-        }
+        free(graph->array);
+        free(graph);
     }
-
-    // Calculate K (maximum number of colors used)
-    int k = 0;
-    for (int i = 0; i < n; i++) {
-        if (result[i] > k) k = result[i];
-    }
-
-    // Print according to the required format
-    printf("%d\n", k + 1);
-    for (int i = 0; i < n; i++) {
-        printf("%d%s", result[i], (i == n - 1) ? "" : " ");
-    }
-    printf("\n");
-
-    free(result);
-    free(available);
 }
 
-int main() {
-    int n, m;
-    if (scanf("%d %d", &n, &m) != 2) return 0;
-
-    Graph* graph = createGraph(n);
-    for (int i = 0; i < m; i++) {
+/* Function to read graph from input */
+Graph* readGraph() {
+    int N, M;
+    scanf("%d %d", &N, &M);
+    
+    Graph* graph = createGraph(N, M);
+    
+    for (int i = 0; i < M; i++) {
         int u, v;
         scanf("%d %d", &u, &v);
         addEdge(graph, u, v);
     }
+    
+    return graph;
+}
 
-    greedyColoring(graph);
+/* Find maximum of two integers */
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
 
+/* Find minimum number of colors using greedy sequential coloring */
+int findChromaticNumberGreedy(Graph* graph) {
+    /* Reset colors */
+    for (int i = 0; i < graph->N; i++) {
+        graph->color[i] = 0;
+    }
+    
+    int maxColor = 0;
+    
+    /* Process vertices sequentially in order (0, 1, 2, ..., N-1) */
+    /* This is a classic greedy approach: make locally optimal choice at each step */
+    for (int v = 0; v < graph->N; v++) {
+        /* Find the smallest color not used by adjacent vertices */
+        bool usedColors[MAXN];
+        for (int i = 0; i <= graph->N; i++) {
+            usedColors[i] = false;
+        }
+        
+        /* Check which colors are used by already-colored neighbors */
+        AdjListNode* current = graph->array[v].head;
+        while (current) {
+            int u = current->dest;
+            if (graph->color[u] != 0) {
+                usedColors[graph->color[u]] = true;
+            }
+            current = current->next;
+        }
+        
+        /* Assign the smallest available color (greedy choice) */
+        for (int c = 1; c <= graph->N; c++) {
+            if (!usedColors[c]) {
+                graph->color[v] = c;
+                maxColor = max(maxColor, c);
+                break;
+            }
+        }
+    }
+    
+    return maxColor;
+}
+
+/* Main function for greedy approach */
+int main() {
+    Graph* graph = readGraph();
+    
+    int chromaticGreedy = findChromaticNumberGreedy(graph);
+    
+    printf("Greedy: %d\n", chromaticGreedy);
+    
+    freeGraph(graph);
+    
     return 0;
 }
