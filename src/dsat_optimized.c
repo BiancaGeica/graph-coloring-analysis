@@ -2,17 +2,17 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-//int the old implementation
-//even if a vertex has only 2 neighbours i still need to check all the other verices
+//in vechea implementare
+//chiar daca un nod are doar 2 vecini tot trebuie sa verific toate celelalte noduri
 
-//linked lists
+//liste inlantuite
 typedef struct vertex {
-    int data; //vertex's index
+    int data; //indexul nodului
     struct vertex *next;
 } vertex;
 
 typedef struct graph {
-    vertex **vertices; //the head of the linked list
+    vertex **vertices; //capul listei inlantuite
     int n;
 } graph;
 
@@ -52,13 +52,13 @@ void free_memory(graph *actual_graph) {
 }
 
 //int check_independent_set(int vertex, int color, graph *actual_graph, int *colors) {
-//shadowing, phenomen that happens when both a local and a global variable has the same name
-//local variables has priority over global data types
+//shadowing, fenomen care apare cand o variabila locala si una globala au acelasi nume
+//variabilele locale au prioritate fata de tipurile de date globale
 int check_independent_set(int actual_vertex, int color, graph *actual_graph, int *colors) {
     vertex *aux = *(actual_graph->vertices + actual_vertex);
     while (aux != NULL) {
         int neighbor = aux->data;
-        // Dacă vecinul are deja culoarea pe care vrem s-o punem -> Conflict
+        // Daca vecinul are deja culoarea pe care vrem s-o punem -> Conflict
         if (*(colors + neighbor) == color) {
             return 0; 
         }
@@ -78,7 +78,7 @@ int saturation_of_vertex(int current_vertex, graph *actual_graph, int *colors) {
         int color = *(colors + aux->data);
         if (color != 0 && *(colors_nearby_vertices + color) == 0) {
             *(colors_nearby_vertices + color) = 1;
-         nr++;
+            nr++;
         }
         aux = aux->next;
     }
@@ -115,11 +115,11 @@ int highest_deg_when_highest_sat(graph *actual_graph, int *colors) {
             if (current_sat > maximum_sat) {
                 maximum_sat = current_sat;
                 maximum_degree = current_deg;
-             the_choosen_one = i;
+                the_choosen_one = i;
             } else if (current_sat == maximum_sat) {
                 if (current_deg > maximum_degree) {
                     maximum_degree = current_deg;
-                 the_choosen_one = i;
+                    the_choosen_one = i;
                 }
             }
         }
@@ -135,7 +135,7 @@ int smallest_valid_color(int actual_vertex, graph *actual_graph, int *colors) {
         }
         color++;
     }
-    return -1; //where are your vertiges????
+    return -1; //unde sunt nodurile????
 }
 
 void dsatur(graph *actual_graph, int *colors) {

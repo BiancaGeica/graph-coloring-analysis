@@ -8,39 +8,39 @@
 
 #define MAXN 2005
 
-/* Structure to represent an adjacency list node */
+/* Structura pentru a reprezenta un nod din lista de adiacenta */
 typedef struct AdjListNode {
     int dest;
     struct AdjListNode* next;
 } AdjListNode;
 
-/* Structure to represent an adjacency list */
+/* Structura pentru a reprezenta o lista de adiacenta */
 typedef struct AdjList {
     AdjListNode* head;
 } AdjList;
 
-/* Structure to represent a graph */
+/* Structura pentru a reprezenta un graf */
 typedef struct Graph {
-    int N;  /* Number of vertices */
-    int M;  /* Number of edges */
+    int N;  /* Numarul de noduri */
+    int M;  /* Numarul de muchii */
     AdjList* array;
     bool adjMatrix[MAXN][MAXN];
     int color[MAXN];
 } Graph;
 
-/* Function to create a new adjacency list node */
+/* Functie pentru a crea un nou nod in lista de adiacenta */
 AdjListNode* createNode(int dest);
 
-/* Function to create a graph with N vertices */
+/* Functie pentru a crea un graf cu N noduri */
 Graph* createGraph(int N, int M);
 
-/* Function to add an edge to an undirected graph */
+/* Functie pentru a adauga o muchie intr-un graf neorientat */
 void addEdge(Graph* graph, int u, int v);
 
-/* Function to free the graph memory */
+/* Functie pentru a elibera memoria grafului */
 void freeGraph(Graph* graph);
 
-/* Function to read graph from input */
+/* Functie pentru a citi graful de la intrare */
 Graph* readGraph();
 
 #endif /* GRAPH_COLORING_H */

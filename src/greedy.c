@@ -1,6 +1,6 @@
 #include "graph_coloring.h"
 
-/* Function to create a new adjacency list node */
+/* Functie pentru a crea un nou nod in lista de adiacenta */
 AdjListNode* createNode(int dest) {
     AdjListNode* newNode = (AdjListNode*)malloc(sizeof(AdjListNode));
     newNode->dest = dest;
@@ -8,14 +8,14 @@ AdjListNode* createNode(int dest) {
     return newNode;
 }
 
-/* Function to create a graph with N vertices */
+/* Functie pentru a crea un graf cu N noduri */
 Graph* createGraph(int N, int M) {
     Graph* graph = (Graph*)malloc(sizeof(Graph));
     graph->N = N;
     graph->M = M;
     graph->array = (AdjList*)malloc(N * sizeof(AdjList));
     
-    /* Initialize adjacency lists and matrices */
+    /* Initializeaza listele de adiacenta si matricile */
     for (int i = 0; i < N; i++) {
         graph->array[i].head = NULL;
         graph->color[i] = 0;
@@ -27,24 +27,24 @@ Graph* createGraph(int N, int M) {
     return graph;
 }
 
-/* Function to add an edge to an undirected graph */
+/* Functie pentru a adauga o muchie intr-un graf neorientat */
 void addEdge(Graph* graph, int u, int v) {
-    /* Add edge from u to v */
+    /* Adauga muchie de la u la v */
     AdjListNode* newNode = createNode(v);
     newNode->next = graph->array[u].head;
     graph->array[u].head = newNode;
     
-    /* Add edge from v to u (undirected) */
+    /* Adauga muchie de la v la u (neorientat) */
     newNode = createNode(u);
     newNode->next = graph->array[v].head;
     graph->array[v].head = newNode;
     
-    /* Update adjacency matrix */
+    /* Actualizeaza matricea de adiacenta */
     graph->adjMatrix[u][v] = true;
     graph->adjMatrix[v][u] = true;
 }
 
-/* Function to free the graph memory */
+/* Functie pentru a elibera memoria grafului */
 void freeGraph(Graph* graph) {
     if (graph) {
         for (int i = 0; i < graph->N; i++) {
@@ -60,7 +60,7 @@ void freeGraph(Graph* graph) {
     }
 }
 
-/* Function to read graph from input */
+/* Functie pentru a citi graful de la intrare */
 Graph* readGraph() {
     int N, M;
     scanf("%d %d", &N, &M);
@@ -76,40 +76,41 @@ Graph* readGraph() {
     return graph;
 }
 
-/* Find maximum of two integers */
+/* Gaseste maximul dintre doi intregi */
 int max(int a, int b) {
     return (a > b) ? a : b;
 }
 
-/* Find minimum number of colors using greedy sequential coloring */
+/* Gaseste numarul minim de culori folosind colorarea secventiala greedy */
 int findChromaticNumberGreedy(Graph* graph) {
-    /* Reset colors */
+    /* Reseteaza culorile */
     for (int i = 0; i < graph->N; i++) {
         graph->color[i] = 0;
     }
     
     int maxColor = 0;
     
-    /* Process vertices sequentially in order (0, 1, 2, ..., N-1) */
-    /* This is a classic greedy approach: make locally optimal choice at each step */
+    /* Proceseaza nodurile secvential in ordine (0, 1, 2, ..., N-1) */
+    /* Aceasta este o abordare greedy clasica: fa alegerea optima local la fiecare pas */
     for (int v = 0; v < graph->N; v++) {
-        /* Find the smallest color not used by adjacent vertices */
+        /* Gaseste cea mai mica culoare nefolosita de nodurile adiacente */
         bool usedColors[MAXN];
         for (int i = 0; i <= graph->N; i++) {
             usedColors[i] = false;
         }
         
-        /* Check which colors are used by already-colored neighbors */
+        /* Verifica ce culori sunt folosite de vecinii deja colorati */
         AdjListNode* current = graph->array[v].head;
         while (current) {
             int u = current->dest;
-            if (graph->color[u] != 0) {
-                usedColors[graph->color[u]] = true;
+            int neighborColor = graph->color[u];
+            if (neighborColor != 0) {
+                usedColors[neighborColor] = true;
             }
             current = current->next;
         }
         
-        /* Assign the smallest available color (greedy choice) */
+        /* Asigneaza cea mai mica culoare disponibila (alegerea greedy) */
         for (int c = 1; c <= graph->N; c++) {
             if (!usedColors[c]) {
                 graph->color[v] = c;
@@ -122,7 +123,7 @@ int findChromaticNumberGreedy(Graph* graph) {
     return maxColor;
 }
 
-/* Main function for greedy approach */
+/* Functia principala pentru abordarea greedy */
 int main() {
     Graph* graph = readGraph();
     

@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-//DSatur = degree of saturation
-//Saturation = number of distinct colors used by it's neighbours
-//if all the neighbours of a vertex has the same color the saturation is 1
-//if i have 5 neighbours with 3 different colors the current_sat is 3
+//DSatur = gradul de saturatie
+//Saturatie = numarul de culori distincte folosite de vecinii sai
+//daca toti vecinii unui nod au aceeasi culoare, saturatia este 1
+//daca am 5 vecini cu 3 culori diferite, saturatia curenta este 3
 
-//matrix of adjacency
+//matrice de adiacenta
 uint8_t** memory_alloc_matrix(int n) {
     uint8_t **matrix = (uint8_t**)malloc(n * sizeof(uint8_t*));
     if (matrix == NULL) {
@@ -36,7 +36,7 @@ uint8_t* memory_alloc_vector(int n) {
     return vector;
 }
 
-//independent set = group of vertexes that doesn't have edges between the same color
+//independent set = grup de noduri care nu au muchii intre ele (pentru aceeasi culoare)
 int check_independent_set(int vertex, int color, int n, uint8_t **matrix, uint8_t *colors) {
     for (size_t i = 0; i < n; i++) {
         if (*(*(matrix + vertex) + i) == 1) {
@@ -70,7 +70,7 @@ int saturation_of_vertex(int vertex, int n, uint8_t **matrix, uint8_t *colors) {
 int degree_vertex(int vertex, int n, uint8_t **matrix, uint8_t *colors) {
     int nr = 0;
     for (size_t i = 0; i < n; i++) {
-        // Count the number of uncolored neighbours
+        // Numara vecinii necolorati
         if (*(*(matrix + vertex) + i) == 1 && *(colors + i) == 0)
             nr++;
     }
@@ -87,7 +87,7 @@ int highest_deg_when_highest_sat(int n, uint8_t **matrix, uint8_t *colors) {
             int current_sat = saturation_of_vertex(i, n, matrix, colors);
             int current_degree = degree_vertex(i, n, matrix, colors);
             
-            // DSATUR logic: when all the verices has the same saturation, we search their highest degree
+            // Logica DSATUR: cand toate nodurile au aceeasi saturatie, cautam gradul cel mai mare
             if (current_sat > maximum_sat || (current_sat == maximum_sat && current_degree > maximum_degree)) {
                 maximum_sat = current_sat;
                 maximum_degree = current_degree;
@@ -113,7 +113,7 @@ int smallest_valid_color(int vertex, int n, uint8_t **matrix, uint8_t *colors) {
         }
     }
     
-    //if i don't have enough colors I add one more
+    //daca nu am suficiente culori, mai adaug una
     return max_color + 1;
 }
 
@@ -136,7 +136,7 @@ void dsatur(int n, uint8_t **matrix, uint8_t *colors) {
 int main() {
     int n, m;
     
-    scanf("%d %d", &n, &m); //n-verices m-edges
+    scanf("%d %d", &n, &m);
     
     uint8_t **matrix = memory_alloc_matrix(n);
     
