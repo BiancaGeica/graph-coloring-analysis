@@ -1,0 +1,9 @@
+# Editor / IDE
+.idea/
+.vscode/
+
+# C build artifacts
+*.o
+*.obj
+*.exe
+*.out
