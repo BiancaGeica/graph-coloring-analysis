@@ -1,111 +1,108 @@
-# proiect_analiza_algoritmilor
+# Project Algorithm Analysis
 
-CUM FOLOSESTI MAKEFILE-UL
+HOW TO USE THE MAKEFILE
 
-1. Compilare (Build All) - Transforma toate fisierele .c din directorul curent in executabile.
+1. Build All - Compiles all .c files in the current directory into executable files.
 
 $ make
 
 
-2. Curatare (Clean) - Sterge toate executabilele si fisierele temporare.
+2. Clean - Deletes all executables and temporary files.
 
 $ make clean
 
-Prezentare algoritm Welsh-Powell:
- - Welsh-Powell este o euristică Greedy bazată pe gradul nodurilor
- - Ideea de baza este ca nodurile cu multe conexiuni (grad mare) sunt cele mai dificil de colorat, așa că le colorăm primele.
+Welsh-Powell Algorithm Overview:
+ - Welsh-Powell is a Greedy heuristic based on vertex degrees.
+ - The core idea is that vertices with many connections (high degree) are the most difficult to color, so we color them first.
 
-Am consultat diferite implementari gasite pe github in C [1] si in C++ [2], precum si descrieri ale algoritmului [3], [4].
-
-
-Despre teste:
-Dintre grafurile pentru testare, cele de la 1 la 5 au fost scrise manual, celelalte (6-16) au fost generate automat cu generator_teste.c. Testele se pot imparti in 3 categorii, fiecare categorie cu cate 5 teste:
-
-1. Corectitudine (teste mici)
-Fisiere: test1.in ... test5.in
-
-Continut:
-test1.in - graf complet minim (K3). Are 3 noduri si fiecare este legat de toate celelalte (triunghi). Verifica daca algoritmul stie sa aloce 3 culori distincte cand toti vecinii se cearta intre ei.
-
-test2.in - ciclu par (C4). Are 4 noduri asezate in cerc. Nodul 0 e legat de 1, 1 de 2, 2 de 3 și 3 înapoi la 0. Verifica alternanta culorilor. Fiind nr par de noduri, ar trebui sa foloseasca doar 2 culori.
-
-test3.in - graf complet (K5)."Worst case". Are 5 noduri si toate sunt conectate intre ele. Ar trebui sa aleaga eexact N culori (5 in cazul asta).
-
-test4.in - graf tip stea. Are un nod central conectat la mai multe noduri periferice care nu au legatura intre ele. Testul perfect pentru Welsh-Powell pt ca algoritmul sorteaza nodurile dupa grad, iar aici nodul central are grad mare (5), restul au grad mic (1). Ar trebui sa coloreze intai centrul si apoi sa refoloseasca o singura culoare pentru toate celelalte noduri din jur (2 culori total).
-
-test5.in - graf cu componente izolate. Testul contine de fapt doua grupuri de noduri care nu au nicio legatura intre ele (un triunghi intr-o parte si alt triunghi in cealalta parte). Daca primul grup foloseste culorile 1, 2, 3 algoritmul ar trebui sa foloseasca tot culorile 1, 2, 3 pentru al doilea grup.
-
-Scop: sa demonstreze ca algoritmul nu "bajbaie" si da rezultatul corect.
-
-Generat: manual
-
-2. Scalabilitate (teste mari - random)
-Fisiere: test6.in ... test10.in
-
-Continut: grafuri generate aleator unde N creste progresiv (50 -> 2000)
-Scop: sa vad cum se comporta algoritmul la crestera nr de noduri (N)
-merge generat un grafic "timp de executie vs. numar de noduri"
-
-Generat: automat
-
-3. Densitate (teste complexe - random)
-Fisiere: test11.in ... test16.in
-Continut: grafuri cu N = 500, dar cu densitate de la 10% la 100%.
-Scop: generare grafic "numar de culori vs. densitate" (sau timp vs densitate)
-vad cum se comportă algoritmul cand graful e mai "incalcit" (multe muchii), dar pastrand nr de noduri fix.
-Generat: automat
+Consulted various C [1] and C++ [2] implementations found on GitHub, as well as algorithm descriptions [3], [4].
 
 
-Bibliografie:
+About Tests:
+Among the test graphs, tests 1 to 5 were created manually, while the others (6-16) were automatically generated using generator_teste.c. The tests are divided into 3 categories, with 5 tests in each category:
+
+1. Correctness (Small Tests)
+Files: test1.in ... test5.in
+
+Content:
+test1.in - Minimal complete graph (K3). Has 3 vertices, each connected to all others (a triangle). Tests if the algorithm correctly allocates 3 distinct colors when all neighbors conflict.
+
+test2.in - Even cycle (C4). Has 4 vertices arranged in a circle (node 0 connected to 1, 1 to 2, 2 to 3, and 3 back to 0). Tests color alternation. Since the number of nodes is even, it should use only 2 colors.
+
+test3.in - Complete graph (K5) - "Worst case". Has 5 vertices, all interconnected. Should choose exactly N colors (5 in this case).
+
+test4.in - Star graph. Has a central node connected to multiple peripheral nodes that are not connected to each other. Perfect test for Welsh-Powell because the algorithm sorts nodes by degree: the central node has a high degree (5), while the rest have a low degree (1). It should color the center first and then reuse a single color for all surrounding nodes (2 colors total).
+
+test5.in - Graph with isolated components. Contains two separate groups of nodes with no connections between them (a triangle on one side and another triangle on the other). If the first group uses colors 1, 2, 3, the algorithm should also use colors 1, 2, 3 for the second group.
+
+Purpose: To demonstrate that the algorithm provides correct results without errors.
+
+Generated: Manually
+
+2. Scalability (Large Random Tests)
+Files: test6.in ... test10.in
+
+Content: Randomly generated graphs where N increases progressively (50 -> 2000).
+Purpose: To observe how the algorithm behaves as the number of nodes (N) increases. Useful for generating an "execution time vs. number of nodes" plot.
+
+Generated: Automatically
+
+3. Density (Complex Random Tests)
+Files: test11.in ... test16.in
+Content: Graphs with N = 500, but with density varying from 10% to 100%.
+Purpose: Generating a "number of colors vs. density" (or time vs. density) plot to see how the algorithm performs when the graph is denser (more edges) while keeping the number of nodes fixed.
+Generated: Automatically
+
+
+References:
 
 [1] https://github.com/leovargasdev/grafos/blob/master/welshPowell.c
 [2] https://github.com/aprilcoskun/graph-coloring/blob/master/Welsh-Powell.cpp
 [3] https://www.geeksforgeeks.org/dsa/welsh-powell-graph-colouring-algorithm/
 [4] https://en.wikipedia.org/wiki/Floyd–Warshall_algorithm
 
-=====Algoritm Degree of Saturation=====
+=====Degree of Saturation Algorithm=====
 
-Acest proiect conține două implementări în limbajul C ale algoritmului DSATUR (Degree of Saturation), o euristică utilizată pentru rezolvarea problemei colorării grafurilor. Scopul algoritmului este de a colora vârfurile unui graf astfel încât două vârfuri adiacente să nu aibă aceeași culoare, încercând să minimizeze numărul total de culori utilizate (numărul cromatic).
+This project contains two C implementations of the DSATUR (Degree of Saturation) algorithm, a heuristic used for solving the graph coloring problem. The goal of the algorithm is to color the vertices of a graph such that no two adjacent vertices share the same color, attempting to minimize the total number of colors used (the chromatic number).
 
-Proiectul oferă două abordări distincte în ceea ce privește gestionarea memoriei și reprezentarea grafului:
+The project offers two distinct approaches regarding memory management and graph representation:
 
-Varianta Matriceală (Matrice de Adiacență)
+Adjacency Matrix Variant
 
-    Utilizează o matrice uint8_t de dimensiune N×N.
+    Uses a uint8_t matrix of size N×N.
 
-    Avantaj: Implementare mai directă și acces rapid (O(1)) pentru verificarea existenței unei muchii.
+    Pros: Direct implementation and fast (O(1)) edge existence verification.
 
-    Dezavantaj: Consum mai mare de memorie O(N²), fiind mai puțin potrivită pentru grafuri foarte mari și rare.
+    Cons: Higher memory footprint O(N²), making it less suitable for very large, sparse graphs.
     
-Varianta Optimizată (Liste de Adiacență)
+Optimized Variant (Adjacency Lists)
 
-    Utilizează liste înlănțuite pentru a stoca vecinii fiecărui vârf.
+    Uses linked lists to store the neighbors of each vertex.
 
-    Avantaj: Eficientă din punct de vedere al memoriei pentru grafuri rare unde numărul de muchii este mult mai mic decât pătratul numărului de vârfuri.
+    Pros: Memory-efficient for sparse graphs where the number of edges is significantly lower than the square of the number of vertices.
 
-**Algoritmul DSat pentru grafuri rare, dar cu multe noduri**
+**DSat Algorithm for Sparse Graphs with Many Nodes**
 
-*Avantaje:* 
+*Pros:* 
 
-    -Eficienta pe grafuri cu multe noduri si putine muchii (rare), memoria utilizata este proportionala cu numarul de muchii, lucru datorat utilizarii listelor de adiacenta in locul matricii de adiacenta
-    -Parcurgerea vecinilor se face folosind lista de adiacenta evitand astfel nodurile neconectate
-    -Algoritmul DSatur alege dinamic următorul nod de colorat bazându-se pe gradul de saturație deci obtine frecvent un număr cromatic mai mic (o soluție mai eficientă) comparativ cu algoritmi precum Greedy sau Welsh-Powell, deoarece prioritizează nodurile cu gradul de saturatie cel mai mare.
+    - High efficiency on graphs with many nodes and few edges (sparse); memory usage is proportional to the number of edges due to using adjacency lists instead of an adjacency matrix.
+    - Neighbor traversal is done via the adjacency list, avoiding unconnected nodes.
+    - DSatur dynamically selects the next node to color based on saturation degree, frequently obtaining a smaller chromatic number (a more optimal solution) compared to algorithms like Greedy or Welsh-Powell, as it prioritizes nodes with the highest saturation degree.
     
-*Dezavantaje*
+*Cons:*
 
-    -Pe grafuri dense(cu un numar mare de muchii) listele de adiacenta produc un overhead semnificativ
-    -Algoritmul nu verifica daca o noua muchie adaugata exista deja deoarece ar consuma foarte multe resurse (Verificarea ar fi O(gradul_nodului))
+    - On dense graphs (with a high number of edges), adjacency lists introduce significant memory overhead.
+    - The algorithm does not check whether a newly added edge already exists because doing so would consume too many resources (verification would take O(node_degree)).
 
-**Algoritmul DSat pentru grafuri dense, dar cu putine noduri**
+**DSat Algorithm for Dense Graphs with Few Nodes**
 
-*Avantaje:* 
+*Pros:* 
 
-    -Performanta superioara pe grafuri dense
-    -Are acces instantaneu la muchii deoarece se verifica direct in matrice
-    -Deoarece implementarea folosește tipul de date uint8_t (1 byte) în loc de int (4 bytes) pentru stocarea matricei, memoria este redusa si astfel pot fi procesate grafuri cu dimensiuni mai mari
+    - Superior performance on dense graphs.
+    - Instant access to edges via direct matrix lookups.
+    - Since the implementation uses uint8_t (1 byte) instead of int (4 bytes) to store the matrix, memory usage is reduced, allowing larger graphs to be processed.
     
-*Dezavantaje*
+*Cons:*
 
-    -Risipeste multa memorie la grafurile rare deoarece aloca memorie pentru un graf complet indiferent de cate muchii are graful
-    -Ineficient in gasirea vecinilor, algoritmul este nevoit sa parcurga toate nodurile grafului pentru fiecare verificare
-
+    - Wastes memory on sparse graphs because it allocates memory for a complete graph regardless of the actual edge count.
+    - Inefficient for finding neighbors, as the algorithm must traverse all nodes in the graph for every check.
